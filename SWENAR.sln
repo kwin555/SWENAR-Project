@@ -1,0 +1,17 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWENAR", "SWENAR.csproj", "{B4C51C98-0699-4955-B207-0D9602CCD88A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B4C51C98-0699-4955-B207-0D9602CCD88A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4C51C98-0699-4955-B207-0D9602CCD88A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4C51C98-0699-4955-B207-0D9602CCD88A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4C51C98-0699-4955-B207-0D9602CCD88A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
