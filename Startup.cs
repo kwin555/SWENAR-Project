@@ -26,15 +26,14 @@ namespace SWENAR
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlite(
-                    Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<SWENARDBContext>(options =>
+                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<SWENARDBContext>();
 
-            services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+            //services.AddIdentityServer()
+            //    .AddApiAuthorization<ApplicationUser, SWENARDBContext>();
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();

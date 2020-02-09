@@ -10,12 +10,13 @@ using System.Threading.Tasks;
 
 namespace SWENAR.Data
 {
-    public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
+    public class SWENARDBContext : ApiAuthorizationDbContext<ApplicationUser>
     {
-        public ApplicationDbContext(
+        public SWENARDBContext(
             DbContextOptions options,
             IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
         {
         }
+        public DbSet<Customer> Customer { get; set; }
     }
 }
