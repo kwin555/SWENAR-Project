@@ -11,6 +11,8 @@ using SWENAR.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SWENAR.Services;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace SWENAR
 {
@@ -29,8 +31,9 @@ namespace SWENAR
             services.AddDbContext<SWENARDBContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<SWENARDBContext>();
+            services.AddIdentity<User, Role>()
+                .AddEntityFrameworkStores<SWENARDBContext>()
+                .AddDefaultTokenProviders();
 
             //services.AddIdentityServer()
             //    .AddApiAuthorization<ApplicationUser, SWENARDBContext>();
@@ -40,6 +43,7 @@ namespace SWENAR
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.AddTransient<IEmailSender, EmailSender>();
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -70,7 +74,7 @@ namespace SWENAR
             app.UseRouting();
 
             app.UseAuthentication();
-            app.UseIdentityServer();
+            //app.UseIdentityServer();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {

@@ -1,20 +1,15 @@
 ﻿using SWENAR.Models;
 using IdentityServer4.EntityFramework.Options;
-using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace SWENAR.Data
 {
-    public class SWENARDBContext : ApiAuthorizationDbContext<ApplicationUser>
+    public class SWENARDBContext : IdentityDbContext<User, Role, int>
     {
         public SWENARDBContext(
-            DbContextOptions options,
-            IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
+            DbContextOptions options) : base(options)
         {
         }
         public DbSet<Customer> Customer { get; set; }
