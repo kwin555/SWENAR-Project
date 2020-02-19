@@ -62,7 +62,7 @@ namespace SWENAR.Controllers
             _db.Customers.Add(customer);
 
             await _db.SaveChangesAsync();
-            return CreatedAtAction(nameof(Get), new { id = customer.id }, customer);
+            return CreatedAtAction(nameof(Get), new { id = customer.Id }, customer);
         }
 
         /// <summary>

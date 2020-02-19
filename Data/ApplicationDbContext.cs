@@ -12,6 +12,8 @@ namespace SWENAR.Data
             DbContextOptions options) : base(options)
         {
         }
+
         public virtual DbSet<Customer> Customers { get; set; }
+        public virtual DbSet<Invoice> Invoices { get; set; }
     }
 }

@@ -9,9 +9,11 @@ namespace SWENAR.ViewModels
     public class CustomerCreateVm
     {
         [Required]
+        [MaxLength(256, ErrorMessage = "Maximum length for customer name is 256 characters.")]
         public string Name { get; set; }
 
         [Required]
+        [MaxLength(100, ErrorMessage = "Maximum length for customer number is 100 characters.")]
         public string Number { get; set; }
     }
 }
