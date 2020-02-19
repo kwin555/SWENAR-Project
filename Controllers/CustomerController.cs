@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SWENAR.Data;
@@ -12,6 +9,7 @@ using SWENAR.ViewModels;
 
 namespace SWENAR.Controllers
 {
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CustomerController : ControllerBase
@@ -22,6 +20,10 @@ namespace SWENAR.Controllers
             this._db = db;
         }
 
+        /// <summary>
+        /// Method to get all customers
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Customer>>> Get()
         {
@@ -29,6 +31,11 @@ namespace SWENAR.Controllers
             return customers;
         }
 
+        /// <summary>
+        /// Method to get a customer 
+        /// </summary>
+        /// <param name="id">Customer Id</param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<Customer>> Get(int id)
         {
@@ -36,6 +43,11 @@ namespace SWENAR.Controllers
             return customer;
         }
 
+        /// <summary>
+        /// Method to create a customer in database
+        /// </summary>
+        /// <param name="vm">Customer create view model</param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateModel]
         public async Task<ActionResult<Customer>> Create(CustomerCreateVm vm)
@@ -53,6 +65,12 @@ namespace SWENAR.Controllers
             return CreatedAtAction(nameof(Get), new { id = customer.id }, customer);
         }
 
+        /// <summary>
+        /// Method to update an existing customer
+        /// </summary>
+        /// <param name="id">Customer Id</param>
+        /// <param name="vm">Customer update view model</param>
+        /// <returns></returns>
         [HttpPut("{id}")]
         [ValidateModel]
         public async Task<IActionResult> Update(int id, CustomerUpdateVm vm)
@@ -76,6 +94,11 @@ namespace SWENAR.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Method to delete an existing customer 
+        /// </summary>
+        /// <param name="id">Customer Id</param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         public async Task<ActionResult<Customer>> Delete(int id)
         {

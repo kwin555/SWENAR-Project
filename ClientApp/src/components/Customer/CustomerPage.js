@@ -11,7 +11,7 @@ const style = {
   fontSize: '12px',
 };
 
-export class CustomerPage extends Component{
+export class CustomerPage extends Component {
     static displayName = CustomerPage.name;
     constructor(props) {
         super(props);
