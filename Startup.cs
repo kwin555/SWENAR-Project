@@ -83,7 +83,7 @@ namespace SWENAR
 
             app.UseAuthentication();
             //app.UseIdentityServer();
-            app.UseAuthorization();
+            //app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
@@ -101,6 +101,14 @@ namespace SWENAR
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
+
+#if DEBUG
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var db = serviceScope.ServiceProvider.GetRequiredService<SWENARDBContext>();
+                db.Database.EnsureCreated();
+            }
+#endif
         }
     }
 }

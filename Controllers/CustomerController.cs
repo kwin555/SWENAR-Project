@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +28,8 @@ namespace SWENAR.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Customer>>> Get()
         {
-            var customers = await _db.Customers.ToListAsync();
+            var customers = await _db.Customers
+                .OrderBy(a => -a.Id).ToListAsync();
             return customers;
         }
 

@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 class CustomerFormEdit extends Component {
     constructor(props) {
         super(props);
-        
+
         this.state = {
             Name: '',
             number: '',
@@ -14,28 +14,28 @@ class CustomerFormEdit extends Component {
         this.setState({
             [e.target.name]: e.target.value,
         });
-        const {Name, number} = this.state
+        const { Name, number } = this.state
         console.log(Name, number);
     }
 
-    submitToPUT = () => {  
-        let {id} = this.props;
+    submitToPUT = () => {
+        let { id } = this.props;
         id = parseInt(id);
         const axios = require('axios');
-        const {Name, number} = this.state;
+        const { Name, number } = this.state;
         this.props.handleNameNumberchange(Name, number);
         console.log(Name, number)
         axios.put(`/api/customer/${id}`, {
             id,
             Name,
             Number: number,
-          })
-          .then(function (response) {
-            console.log(response);
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+        })
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     }
 
     render = () => {
@@ -49,10 +49,10 @@ class CustomerFormEdit extends Component {
                     <input id="number" name="number" type="text" onChange={this.onChange} />
                 </form>
                 <div>
-                    <button onClick={this.submitToPUT}>Submit</button>
+                    <button onClick={this.submitToPUT}>Save</button>
                 </div>
             </div>
-            
+
         );
     }
 }

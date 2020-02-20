@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { URL } from './CustomerConstants';
 
 class CustomerForm extends Component {
     constructor(props) {
         super(props);
-        
+
         this.state = {
             Name: '',
             number: '',
@@ -15,26 +15,26 @@ class CustomerForm extends Component {
         this.setState({
             [e.target.name]: e.target.value,
         });
-        const {Name, number} = this.state
+        const { Name, number } = this.state
         console.log(Name, number);
     }
 
-    submitToPost = () => {  
+    submitToPost = () => {
         let curr = this;
         const axios = require('axios');
-        const {Name, number} = this.state;
+        const { Name, number } = this.state;
         console.log(Name, number)
         axios.post('/api/customer', {
             Name: Name,
             Number: number,
-          })
-          .then(function (response) {
-            console.log(response);
-            curr.props.handleNumName(number, Name);
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+        })
+            .then(function (response) {
+                console.log(response);
+                curr.props.handleNumName(number, Name);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     }
 
     render = () => {
@@ -48,10 +48,10 @@ class CustomerForm extends Component {
                     <input id="number" name="number" type="text" onChange={this.onChange} />
                 </form>
                 <div>
-                    <button onClick={this.submitToPost}>Submit</button>
+                    <button onClick={this.submitToPost}>Add</button>
                 </div>
             </div>
-            
+
         );
     }
 }
