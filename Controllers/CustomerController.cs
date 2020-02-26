@@ -42,6 +42,12 @@ namespace SWENAR.Controllers
         public async Task<ActionResult<Customer>> Get(int id)
         {
             var customer = await _db.Customers.FindAsync(id);
+
+            if (customer is null)
+            {
+                return NotFound();
+            }
+
             return customer;
         }
 
