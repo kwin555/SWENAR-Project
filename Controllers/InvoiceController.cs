@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Spreadsheet;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +12,7 @@ using SWENAR.Data;
 using SWENAR.Models;
 using SWENAR.Validation;
 using SWENAR.ViewModels;
+using static SWENAR.Helpers.FileHelpers;
 
 namespace SWENAR.Controllers
 {
@@ -18,9 +22,12 @@ namespace SWENAR.Controllers
     public class InvoiceController : ControllerBase
     {
         private readonly SWENARDBContext _db;
-        public InvoiceController(SWENARDBContext db)
+        private readonly IWebHostEnvironment _env;
+
+        public InvoiceController(SWENARDBContext db, IWebHostEnvironment env)
         {
             this._db = db;
+            this._env = env;
         }
 
         /// <summary>
@@ -131,11 +138,103 @@ namespace SWENAR.Controllers
             return invoice;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Load(IFormFile excelFile)
+
+        [HttpPost("Load")]
+        public async Task<ActionResult<IEnumerable<Invoice>>> Load([FromForm]IFormFile excelFile)
         {
-            await Task.FromResult(0);
-            return Ok();
+            var customers = await _db.Customers.ToListAsync();
+            var invoices = new List<Invoice>();
+            using (SpreadsheetDocument doc = SpreadsheetDocument.Open(excelFile.OpenReadStream(), false))
+            {
+                WorkbookPart workbookPart = doc.WorkbookPart;
+                WorksheetPart worksheetPart = workbookPart.WorksheetParts.First();
+                SheetData sheetData = worksheetPart.Worksheet.Elements<SheetData>().First();
+                var rowCount = 0;
+                foreach (Row r in sheetData.Elements<Row>())
+                {
+                    var rowIsValid = true;
+                    var invoice = new Invoice();
+
+                    if (rowCount > 0)
+                    {
+                        var cellCount = 0;
+
+                        foreach (Cell c in r.Elements<Cell>())
+                        {
+                            var cellValue = c.InnerText;
+                            var stringTable = workbookPart.GetPartsOfType<SharedStringTablePart>()
+                                           .FirstOrDefault();
+                            if (stringTable != null
+                                && c.DataType != null
+                                && (c.DataType.Value == CellValues.SharedString || c.DataType.Value == CellValues.Date))
+                            {
+                                cellValue =
+                                    stringTable.SharedStringTable
+                                    .ElementAt(int.Parse(cellValue)).InnerText;
+                            }
+
+                            var customerName = string.Empty;
+                            switch (cellCount)
+                            {
+                                case 0:
+                                    customerName = cellValue;
+                                    break;
+                                case 1:
+                                    if (!customers.Any(a => a.Number.ToLower() == cellValue.ToLower()))
+                                    {
+                                        _db.Customers.Add(new Customer()
+                                        {
+                                            Name = customerName,
+                                            Number = cellValue
+                                        });
+                                    }
+                                    break;
+                                case 2:
+                                    invoice.InvoiceNumber = cellValue;
+                                    break;
+                                case 3:
+                                    if (DateTime.TryParse(cellValue, out DateTime invDate))
+                                    {
+                                        invoice.InvoiceDate = invDate;
+                                    }
+                                    else
+                                    {
+                                        rowIsValid = false;
+                                    }
+                                    break;
+                                case 4:
+                                    if (DateTime.TryParse(cellValue, out DateTime dueDate))
+                                    {
+                                        invoice.DueDate = dueDate;
+                                    }
+                                    else
+                                    {
+                                        rowIsValid = false;
+                                    }
+                                    break;
+                                default:
+                                    break;
+                            }
+                            cellCount++;
+
+                        }
+
+                    }
+
+                    if (rowIsValid && !string.IsNullOrWhiteSpace(invoice.InvoiceNumber))
+                    {
+                        invoices.Add(invoice);
+                    }
+                    rowCount++;
+                }
+            }
+            await _db.SaveChangesAsync();
+
+            _db.Invoices.AddRange(invoices);
+            await _db.SaveChangesAsync();
+            return invoices;
         }
     }
+
+
 }
