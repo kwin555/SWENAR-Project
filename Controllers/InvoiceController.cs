@@ -137,12 +137,15 @@ namespace SWENAR.Controllers
             return invoice;
         }
 
-
+        /// <summary>
+        /// Loads excel file with invoices to the database
+        /// </summary>
+        /// <param name="excelFile">IFormfile Excel file</param>
+        /// <returns>List of rows from excel file</returns>
         [HttpPost("Load")]
-        public async Task<ActionResult<IEnumerable<Invoice>>> Load([FromForm]IFormFile excelFile)
+        public async Task<ActionResult<IEnumerable<InvoiceLoadVm>>> Load([FromForm]IFormFile excelFile)
         {
             var customers = await _db.Customers.ToListAsync();
-            var invoices = new List<Invoice>();
 
             if (excelFile == null || excelFile.Length <= 0)
             {
@@ -154,6 +157,51 @@ namespace SWENAR.Controllers
                 return null;
             }
 
+            var invoiceVms = ReadFile(excelFile);
+            await _db.Customers.AddRangeAsync(invoiceVms
+                .Where(a => !customers.Any(c => c.Number.ToLower() == a.CustomerNumber.ToLower()))
+                .Select(a => new Customer()
+                {
+                    Name = a.CustomerName,
+                    Number = a.CustomerNumber
+                }));
+
+            await _db.SaveChangesAsync();
+            customers = await _db.Customers.ToListAsync();
+            var currentMaxInvoiceId = await _db.Invoices.MaxAsync(a => a.Id);
+
+            await _db.Invoices.AddRangeAsync(invoiceVms.Select(i => new Invoice()
+            {
+                CustomerId = customers.SingleOrDefault(c => c.Number.ToLower() == i.CustomerNumber.ToLower()).Id,
+                InvoiceNumber = i.InvoiceNumber,
+                InvoiceDate = i.InvoiceDate,
+                DueDate = i.DueDate,
+                Amount = i.Amount,
+                Status = InvoiceStatus.PendingPayment
+            }));
+
+            await _db.SaveChangesAsync();
+
+            return _db.Invoices
+                .Where(i => i.Id > currentMaxInvoiceId)
+                .Select(i => new InvoiceLoadVm()
+                {
+                    Id = i.Id,
+                    InvoiceNumber = i.InvoiceNumber,
+                    InvoiceDate = i.InvoiceDate,
+                    DueDate = i.DueDate,
+                    Amount = i.Amount
+                }).ToList();
+        }
+
+        /// <summary>
+        /// Reads excel and return a list of rows
+        /// </summary>
+        /// <param name="excelFile">Excel file</param>
+        /// <returns>List of rows</returns>
+        private static List<InvoiceLoadVm> ReadFile(IFormFile excelFile)
+        {
+            var invoices = new List<InvoiceLoadVm>();
             using (var package = new ExcelPackage(excelFile.OpenReadStream()))
             {
                 ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
@@ -161,14 +209,19 @@ namespace SWENAR.Controllers
 
                 for (int row = 2; row <= rowCount; row++)
                 {
-                    invoices.Add(new Invoice
+                    var invoice = new InvoiceLoadVm()
                     {
-                        CustomerId = 1
-                       
-                    });
+                        CustomerName = worksheet.Cells[row, 1].Value.ToString().Trim(),
+                        CustomerNumber = worksheet.Cells[row, 2].Value.ToString().Trim(),
+                        InvoiceNumber = worksheet.Cells[row, 3].Value.ToString().Trim(),
+                        InvoiceDate = Convert.ToDateTime(worksheet.Cells[row, 4].Value.ToString().Trim()),
+                        DueDate = Convert.ToDateTime(worksheet.Cells[row, 5].Value.ToString().Trim()),
+                        Amount = Convert.ToDecimal(worksheet.Cells[row, 6].Value.ToString().Trim())
+                    };
+
+                    invoices.Add(invoice);
                 }
             }
-
 
             return invoices;
         }
