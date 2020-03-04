@@ -168,7 +168,11 @@ namespace SWENAR.Controllers
 
             await _db.SaveChangesAsync();
             customers = await _db.Customers.ToListAsync();
-            var currentMaxInvoiceId = await _db.Invoices.MaxAsync(a => a.Id);
+            var currentMaxInvoiceId = 1;
+            if (_db.Customers.Count() > 0)
+            {
+                currentMaxInvoiceId = await _db.Invoices.MaxAsync(a => a.Id);
+            }
 
             await _db.Invoices.AddRangeAsync(invoiceVms.Select(i => new Invoice()
             {
