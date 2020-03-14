@@ -15,5 +15,6 @@ namespace SWENAR.Data
 
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<Invoice> Invoices { get; set; }
+        public virtual DbSet<Person> People { get; set; }
     }
 }
