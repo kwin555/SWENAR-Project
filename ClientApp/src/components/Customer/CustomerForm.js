@@ -23,7 +23,6 @@ class CustomerForm extends Component {
         let curr = this;
         const axios = require('axios');
         const { Name, number } = this.state;
-        console.log(Name, number)
         axios.post('/api/customer', {
             Name: Name,
             Number: number,
