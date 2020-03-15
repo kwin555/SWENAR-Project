@@ -45,7 +45,7 @@ namespace SWENAR.Controllers
                     UserName = vm.UserName
                 };
 
-                var userResult = await _userManager.CreateAsync(user, "password");
+                var userResult = await _userManager.CreateAsync(user, "Password@1");
 
                 if (userResult.Succeeded)
                 {
