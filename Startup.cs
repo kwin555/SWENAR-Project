@@ -14,6 +14,7 @@ using Microsoft.Extensions.Hosting;
 using SWENAR.Services;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.OpenApi.Models;
+using SWENAR.SeedCommon;
 
 namespace SWENAR
 {
@@ -59,6 +60,8 @@ namespace SWENAR
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+            services.AddScoped(typeof(InitialDataSeedStore));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -90,10 +93,7 @@ namespace SWENAR
             app.UseRouting();
 
             app.UseCors();
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
@@ -125,7 +125,13 @@ namespace SWENAR
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
                 var db = serviceScope.ServiceProvider.GetRequiredService<SWENARDBContext>();
-                db.Database.EnsureCreated();
+                db.Database.EnsureCreated();        
+            }
+
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var rse = serviceScope.ServiceProvider.GetRequiredService<InitialDataSeedStore>(); 
+                rse.EnsureSeedData().Wait();
             }
 #endif
         }

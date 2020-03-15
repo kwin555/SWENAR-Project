@@ -60,6 +60,37 @@ namespace SWENAR.Controllers
         }
 
         /// <summary>
+        /// Method to get a invoices for a customer by customer id
+        /// </summary>
+        /// <param name="id">Customer Id</param>
+        /// <returns>List of invoices for a customer</returns>
+        [HttpGet("{customerid}")]
+        public async Task<ActionResult<List<Invoice>>> GetInvoiceByCustomerId(int customerId)
+        {
+            var invoices = await _db.Invoices
+                .Where(inv => inv.CustomerId == customerId)
+                .ToListAsync();
+
+            return invoices;
+        }
+
+        /// <summary>
+        /// Method to get a invoices for a customer by customer number
+        /// </summary>
+        /// <param name="id">Customer Id</param>
+        /// <returns>List of invoices for a customer</returns>
+        [HttpGet("{customernumber}")]
+        public async Task<ActionResult<List<Invoice>>> GetInvoiceByCustomerNumber(string customerNumber)
+        {
+            var invoices = await _db.Invoices
+                .Include(inv => inv.Customer)
+                .Where(inv => inv.Customer.Number == customerNumber)
+                .ToListAsync();
+
+            return invoices;
+        }
+
+        /// <summary>
         /// Method to create a Invoice in database
         /// </summary>
         /// <param name="vm">Invoice create view model</param>

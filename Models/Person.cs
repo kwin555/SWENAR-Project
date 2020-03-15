@@ -26,7 +26,7 @@ namespace SWENAR.Models
         public string Phone { get; set; }
 
         public int? CustomerId { get; set; }
-        public Customer Custoemr { get; set; }
+        public Customer Customer { get; set; }
 
         public int? UserId { get; set; }
         public User User { get; set; }
