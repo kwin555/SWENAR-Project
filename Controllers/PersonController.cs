@@ -22,7 +22,7 @@ namespace SWENAR.Controllers
         }
 
         /// <summary>
-        /// Method to get all persons
+        /// Method to get all people
         /// </summary>
         /// <returns></returns>
         [HttpGet]

@@ -29,6 +29,11 @@ namespace SWENAR.Controllers
             this._userManager = userManager;
         }
 
+        /// <summary>
+        /// Create a user for a person
+        /// </summary>
+        /// <param name="vm">User Create View Model</param>
+        /// <returns>New user</returns>
         [HttpPost]
         [ValidateModel]
         public async Task<ActionResult<User>> Create(UserCreateVm vm)

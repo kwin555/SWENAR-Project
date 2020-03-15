@@ -30,7 +30,7 @@ namespace SWENAR.Controllers
         }
 
         /// <summary>
-        /// Method to get all Invoices
+        /// Method to get all invoices
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -42,7 +42,7 @@ namespace SWENAR.Controllers
         }
 
         /// <summary>
-        /// Method to get a Invoice 
+        /// Method to get a invoice 
         /// </summary>
         /// <param name="id">Invoice Id</param>
         /// <returns></returns>
@@ -91,7 +91,7 @@ namespace SWENAR.Controllers
         }
 
         /// <summary>
-        /// Method to create a Invoice in database
+        /// Method to create a invoice in database
         /// </summary>
         /// <param name="vm">Invoice create view model</param>
         /// <returns></returns>
