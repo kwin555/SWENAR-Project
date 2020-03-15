@@ -81,7 +81,7 @@ namespace SWENAR.Controllers
         /// <returns></returns>
         [HttpPut("{id}")]
         [ValidateModel]
-        public async Task<IActionResult> Update(int id, CustomerUpdateVm vm)
+        public async Task<IActionResult> Update(int id, CustomerEditVm vm)
         {
             if (id != vm.Id)
             {

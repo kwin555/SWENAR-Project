@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SWENAR.ViewModels
 {
-    public class InvoiceCreateVm
+    public class BaseInvoiceVm
     {
         [Required(ErrorMessage = "Customer Id is required.")]
         public int CustomerId { get; set; }

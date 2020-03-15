@@ -36,9 +36,9 @@ namespace SWENAR.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Invoice>>> Get()
         {
-            var Invoices = await _db.Invoices
+            var invoices = await _db.Invoices
                 .OrderBy(a => -a.Id).ToListAsync();
-            return Invoices;
+            return invoices;
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace SWENAR.Controllers
         /// <returns></returns>
         [HttpPut("{id}")]
         [ValidateModel]
-        public async Task<IActionResult> Update(int id, InvoiceUpdateVm vm)
+        public async Task<IActionResult> Update(int id, InvoiceEditVm vm)
         {
             if (id != vm.Id)
             {

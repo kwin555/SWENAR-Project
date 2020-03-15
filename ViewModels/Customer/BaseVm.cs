@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SWENAR.ViewModels
 {
-    public class CustomerCreateVm
+    public class BaseCustomerVm
     {
         [DisplayName("Customer Name")]
         [Required(ErrorMessage = "Name is required.")]
