@@ -8,7 +8,7 @@ namespace SWENAR.ViewModels
 {
     public class PersonBaseVm
     {
-        [Required(ErrorMessage ="First Name is required.")]
+        [Required(ErrorMessage = "First Name is required.")]
         [MaxLength(100, ErrorMessage = "Maximum length for First Name is 100 characters.")]
         public string FName { get; set; }
 
@@ -18,6 +18,7 @@ namespace SWENAR.ViewModels
 
         [Required(ErrorMessage = "Email is required.")]
         [MaxLength(100, ErrorMessage = "Maximum length for Email is 100 characters.")]
+        [EmailAddress]
         public string Email { get; set; }
 
         [MaxLength(16, ErrorMessage = "Maximum length for Phone is 16 characters.")]
