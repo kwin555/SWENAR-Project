@@ -24,5 +24,7 @@ namespace SWENAR.Models
         public DateTime DueDate { get; set; }
 
         public InvoiceStatus Status { get; set; }
+
+        public virtual ICollection<Attachment> Attachments { get; set; }
     }
 }

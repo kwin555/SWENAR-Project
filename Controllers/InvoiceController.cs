@@ -12,6 +12,7 @@ using SWENAR.Data;
 using SWENAR.Models;
 using SWENAR.Validation;
 using SWENAR.ViewModels;
+using static SWENAR.Helpers.FileHelpers;
 
 namespace SWENAR.Controllers
 {
@@ -227,6 +228,70 @@ namespace SWENAR.Controllers
                     DueDate = i.DueDate,
                     Amount = i.Amount
                 }).ToList();
+        }
+
+        [HttpPost("Attachment")]
+        [ValidateModel]
+        public async Task<ActionResult<Attachment>> Attachment(AttachmentVm vm)
+        {
+            if (vm is null)
+            {
+                return BadRequest();
+            }
+
+            var attachment = new Attachment()
+            {
+                InvoiceId = vm.InvoiceId,
+                File = new SWENAR.Models.File()
+                {
+                    Name = vm.File.FileName,
+                    ContentType = vm.File.ContentType,
+                    FileData = new FileData()
+                    {
+                        Data = FileHelper.ReadFully(vm.File.OpenReadStream())
+                    }
+                }
+            };
+
+            _db.Attachments.Add(attachment);
+            if (await _db.SaveChangesAsync() > 0)
+                return CreatedAtAction(nameof(Attachment), new { id = attachment.Id },
+                    new Attachment() { Id = attachment.Id });
+
+            return StatusCode(500);
+        }
+
+        [HttpPost("Download")]
+        public async Task<IActionResult> Download(int attachmentId)
+        {
+            var attachment = await _db.Attachments.Include(a => a.File)
+                .ThenInclude(f => f.FileData)
+                .SingleOrDefaultAsync(a => a.Id == attachmentId);
+
+            if (attachment is null)
+            {
+                return NotFound();
+            }
+
+            return File(attachment.File.FileData.Data, attachment.File.ContentType, attachment.File.Name);
+        }
+
+        [HttpDelete("DeleteAttachment")]
+        public async Task<IActionResult> DeleteAttachment(int attachmentId)
+        {
+            var invoiceAttachment = await _db.Attachments.FindAsync(attachmentId);
+
+            if (invoiceAttachment is null)
+            {
+                return NotFound();
+            }
+
+            _db.Attachments.Remove(invoiceAttachment);
+
+            if (await _db.SaveChangesAsync() > 0)
+                return Ok();
+
+            return StatusCode(500);
         }
 
         /// <summary>

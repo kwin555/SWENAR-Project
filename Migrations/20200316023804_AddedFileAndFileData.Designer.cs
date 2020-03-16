@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SWENAR.Data;
@@ -9,9 +10,10 @@ using SWENAR.Data;
 namespace SWENAR.Migrations
 {
     [DbContext(typeof(SWENARDBContext))]
-    partial class SWENARDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200316023804_AddedFileAndFileData")]
+    partial class AddedFileAndFileData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,9 +60,14 @@ namespace SWENAR.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("UserId1")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
+
+                    b.HasIndex("UserId1");
 
                     b.ToTable("AspNetUserClaims");
                 });
@@ -94,9 +101,14 @@ namespace SWENAR.Migrations
                     b.Property<int>("RoleId")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("UserId1")
+                        .HasColumnType("integer");
+
                     b.HasKey("UserId", "RoleId");
 
                     b.HasIndex("RoleId");
+
+                    b.HasIndex("UserId1");
 
                     b.ToTable("AspNetUserRoles");
                 });
@@ -118,32 +130,6 @@ namespace SWENAR.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("SWENAR.Models.Attachment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<int>("FileId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("InvoiceId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FileId")
-                        .IsUnique();
-
-                    b.HasIndex("InvoiceId");
-
-                    b.ToTable("Attachments");
                 });
 
             modelBuilder.Entity("SWENAR.Models.Customer", b =>
@@ -186,8 +172,7 @@ namespace SWENAR.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FileDataId")
-                        .IsUnique();
+                    b.HasIndex("FileDataId");
 
                     b.ToTable("File");
                 });
@@ -239,6 +224,31 @@ namespace SWENAR.Migrations
                     b.HasIndex("CustomerId");
 
                     b.ToTable("Invoices");
+                });
+
+            modelBuilder.Entity("SWENAR.Models.InvoiceAttachment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<int>("FileId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("InvoiceId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FileId");
+
+                    b.HasIndex("InvoiceId");
+
+                    b.ToTable("InvoiceAttachments");
                 });
 
             modelBuilder.Entity("SWENAR.Models.Person", b =>
@@ -388,16 +398,20 @@ namespace SWENAR.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
                     b.HasOne("SWENAR.Models.User", null)
-                        .WithMany("Claims")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("SWENAR.Models.User", null)
+                        .WithMany("Claims")
+                        .HasForeignKey("UserId1");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
                     b.HasOne("SWENAR.Models.User", null)
-                        .WithMany("Logins")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -412,10 +426,14 @@ namespace SWENAR.Migrations
                         .IsRequired();
 
                     b.HasOne("SWENAR.Models.User", null)
-                        .WithMany("Roles")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("SWENAR.Models.User", null)
+                        .WithMany("Roles")
+                        .HasForeignKey("UserId1");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
@@ -427,26 +445,11 @@ namespace SWENAR.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SWENAR.Models.Attachment", b =>
-                {
-                    b.HasOne("SWENAR.Models.File", "File")
-                        .WithOne("Attachment")
-                        .HasForeignKey("SWENAR.Models.Attachment", "FileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SWENAR.Models.Invoice", "Invoice")
-                        .WithMany("Attachments")
-                        .HasForeignKey("InvoiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("SWENAR.Models.File", b =>
                 {
                     b.HasOne("SWENAR.Models.FileData", "FileData")
-                        .WithOne("File")
-                        .HasForeignKey("SWENAR.Models.File", "FileDataId")
+                        .WithMany()
+                        .HasForeignKey("FileDataId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -456,6 +459,21 @@ namespace SWENAR.Migrations
                     b.HasOne("SWENAR.Models.Customer", "Customer")
                         .WithMany("Invoices")
                         .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SWENAR.Models.InvoiceAttachment", b =>
+                {
+                    b.HasOne("SWENAR.Models.File", "File")
+                        .WithMany()
+                        .HasForeignKey("FileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SWENAR.Models.Invoice", "Invoice")
+                        .WithMany()
+                        .HasForeignKey("InvoiceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

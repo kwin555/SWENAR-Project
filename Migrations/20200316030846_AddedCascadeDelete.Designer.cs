@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SWENAR.Data;
@@ -9,9 +10,10 @@ using SWENAR.Data;
 namespace SWENAR.Migrations
 {
     [DbContext(typeof(SWENARDBContext))]
-    partial class SWENARDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200316030846_AddedCascadeDelete")]
+    partial class AddedCascadeDelete
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
