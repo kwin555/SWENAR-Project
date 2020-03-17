@@ -43,6 +43,38 @@ namespace SWENAR.Controllers
         }
 
         /// <summary>
+        /// Method to get all invoice details
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("[action]")]
+        public async Task<ActionResult<IEnumerable<InvoiceDetailVm>>> GetInvoiceDetails()
+        {
+            var invoices = await _db.Invoices
+                .Include(i => i.Customer)
+                .Include(i => i.Attachments)
+                .OrderBy(i => -i.Id)
+                .Select(i => new InvoiceDetailVm()
+                {
+                    Id = i.Id,
+                    InvoiceNo = i.InvoiceNumber,
+                    CustomerId = i.CustomerId,
+                    CustomerNumber = i.Customer.Number,
+                    CustomerName = i.Customer.Name,
+                    Amount = i.Amount,
+                    InvoiceDate = i.InvoiceDate,
+                    DueDate = i.DueDate,
+                    Status = i.Status.ToString(),
+                    Attachments = i.Attachments == null ? null
+                        : i.Attachments.Select(a => new AttachmentDetailVm()
+                        {
+                            Id = a.Id,
+                            Name = a.File.Name
+                        }).ToList()
+                }).ToListAsync();
+            return invoices;
+        }
+
+        /// <summary>
         /// Method to get a invoice 
         /// </summary>
         /// <param name="id">Invoice Id</param>
@@ -57,6 +89,38 @@ namespace SWENAR.Controllers
                 return NotFound();
             }
 
+            return invoice;
+        }
+
+        /// <summary>
+        /// Method to get all invoice detail
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("[action]/{id}")]
+        public async Task<ActionResult<InvoiceDetailVm>> GetInvoiceDetail(int id)
+        {
+            var invoice = await _db.Invoices
+                .Include(i => i.Customer)
+                .Include(i => i.Attachments)
+                .OrderBy(i => -i.Id)
+                .Select(i => new InvoiceDetailVm()
+                {
+                    Id = i.Id,
+                    InvoiceNo = i.InvoiceNumber,
+                    CustomerId = i.CustomerId,
+                    CustomerNumber = i.Customer.Number,
+                    CustomerName = i.Customer.Name,
+                    Amount = i.Amount,
+                    InvoiceDate = i.InvoiceDate,
+                    DueDate = i.DueDate,
+                    Status = i.Status.ToString(),
+                    Attachments = i.Attachments == null ? null
+                        : i.Attachments.Select(a => new AttachmentDetailVm()
+                        {
+                            Id = a.Id,
+                            Name = a.File.Name
+                        }).ToList()
+                }).SingleOrDefaultAsync(i => i.Id == id);
             return invoice;
         }
 
