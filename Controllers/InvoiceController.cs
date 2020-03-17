@@ -129,7 +129,7 @@ namespace SWENAR.Controllers
         /// </summary>
         /// <param name="id">Customer Id</param>
         /// <returns>List of invoices for a customer</returns>
-        [HttpGet("{customerid}")]
+        [HttpGet("[action]/{customerid}")]
         public async Task<ActionResult<List<Invoice>>> GetInvoiceByCustomerId(int customerId)
         {
             var invoices = await _db.Invoices
@@ -144,11 +144,10 @@ namespace SWENAR.Controllers
         /// </summary>
         /// <param name="id">Customer Id</param>
         /// <returns>List of invoices for a customer</returns>
-        [HttpGet("{customernumber}")]
+        [HttpGet("[action]/{customernumber}")]
         public async Task<ActionResult<List<Invoice>>> GetInvoiceByCustomerNumber(string customerNumber)
         {
             var invoices = await _db.Invoices
-                .Include(inv => inv.Customer)
                 .Where(inv => inv.Customer.Number == customerNumber)
                 .ToListAsync();
 
@@ -238,7 +237,7 @@ namespace SWENAR.Controllers
         /// </summary>
         /// <param name="excelFile">IFormfile Excel file</param>
         /// <returns>List of rows from excel file</returns>
-        [HttpPost("Load")]
+        [HttpPost("[action]")]
         public async Task<ActionResult<IEnumerable<InvoiceLoadVm>>> Load([FromForm]IFormFile excelFile)
         {
             var customers = await _db.Customers.ToListAsync();
@@ -294,7 +293,7 @@ namespace SWENAR.Controllers
                 }).ToList();
         }
 
-        [HttpPost("Attachment")]
+        [HttpPost("[action]")]
         [ValidateModel]
         public async Task<ActionResult<Attachment>> Attachment(AttachmentVm vm)
         {
@@ -325,7 +324,7 @@ namespace SWENAR.Controllers
             return StatusCode(500);
         }
 
-        [HttpGet("Download")]
+        [HttpGet("[action]")]
         public async Task<IActionResult> Download(int attachmentId)
         {
             var attachment = await _db.Attachments.Include(a => a.File)
@@ -340,7 +339,7 @@ namespace SWENAR.Controllers
             return File(attachment.File.FileData.Data, attachment.File.ContentType, attachment.File.Name);
         }
 
-        [HttpDelete("DeleteAttachment")]
+        [HttpDelete("[action]")]
         public async Task<IActionResult> DeleteAttachment(int attachmentId)
         {
             var invoiceAttachment = await _db.Attachments.FindAsync(attachmentId);
