@@ -325,7 +325,7 @@ namespace SWENAR.Controllers
             return StatusCode(500);
         }
 
-        [HttpPost("Download")]
+        [HttpGet("Download")]
         public async Task<IActionResult> Download(int attachmentId)
         {
             var attachment = await _db.Attachments.Include(a => a.File)
