@@ -130,10 +130,23 @@ namespace SWENAR.Controllers
         /// <param name="id">Customer Id</param>
         /// <returns>List of invoices for a customer</returns>
         [HttpGet("[action]/{customerid}")]
-        public async Task<ActionResult<List<Invoice>>> GetInvoiceByCustomerId(int customerId)
+        public async Task<ActionResult<List<InvoiceDetailVm>>> GetInvoiceByCustomerId(int customerId)
         {
             var invoices = await _db.Invoices
+                .Include(inv => inv.Customer)
                 .Where(inv => inv.CustomerId == customerId)
+                .Select(inv => new InvoiceDetailVm()
+                {
+                    Id = inv.Id,
+                    Amount = inv.Amount,
+                    CustomerId = inv.Customer.Id,
+                    CustomerName = inv.Customer.Name,
+                    CustomerNumber = inv.Customer.Number,
+                    DueDate = inv.DueDate,
+                    InvoiceDate = inv.InvoiceDate,
+                    InvoiceNo = inv.InvoiceNumber,
+                    Status = inv.Status.ToString()
+                })
                 .ToListAsync();
 
             return invoices;
@@ -145,10 +158,23 @@ namespace SWENAR.Controllers
         /// <param name="id">Customer Id</param>
         /// <returns>List of invoices for a customer</returns>
         [HttpGet("[action]/{customernumber}")]
-        public async Task<ActionResult<List<Invoice>>> GetInvoiceByCustomerNumber(string customerNumber)
+        public async Task<ActionResult<List<InvoiceDetailVm>>> GetInvoiceByCustomerNumber(string customerNumber)
         {
             var invoices = await _db.Invoices
+                .Include(inv => inv.Customer)
                 .Where(inv => inv.Customer.Number == customerNumber)
+                .Select(inv => new InvoiceDetailVm()
+                {
+                    Id = inv.Id,
+                    Amount = inv.Amount,
+                    CustomerId = inv.Customer.Id,
+                    CustomerName = inv.Customer.Name,
+                    CustomerNumber = inv.Customer.Number,
+                    DueDate = inv.DueDate,
+                    InvoiceDate = inv.InvoiceDate,
+                    InvoiceNo = inv.InvoiceNumber,
+                    Status = inv.Status.ToString()
+                })
                 .ToListAsync();
 
             return invoices;
