@@ -83,6 +83,7 @@ export class CustomerPage extends Component {
     if (this.state.redirect) {
       return <Redirect push to='/customerspage' />;
     }
+    const { id } = this.props.match.params;
 
     return (
       <div>
@@ -94,12 +95,12 @@ export class CustomerPage extends Component {
 
           <div style={style}>
             <CustomerFormEdit
-              id={this.props.match.params.id}
+              id={id}
               handleNameNumberchange={this.handleNameNumberchange}
             />
             <button onClick={this.handleDelete}>Delete</button>
           </div>
-          <InvoicePage id={this.props.match.params.id} />
+          <InvoicePage id={id} />
         </div>
       </div>
     );
