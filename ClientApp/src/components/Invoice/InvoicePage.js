@@ -15,7 +15,7 @@ export class InvoicePage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      customers: []
+        invoice: []
     };
   }
 
