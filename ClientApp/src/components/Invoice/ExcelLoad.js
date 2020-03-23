@@ -7,7 +7,7 @@ export class ExcelLoad extends Component {
     super(props);
     this.state = {};
   }
-
+  // component used to Post an excel file to the database
   render() {
     return (
       <div>

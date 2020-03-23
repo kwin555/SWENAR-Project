@@ -3,29 +3,29 @@ import { AgGridReact } from "ag-grid-react";
 import { URL } from "./InvoiceConstants";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-balham.css";
-
+//default styling of the react datagrid
 const style = {
   height: "300px",
-  width: "1000px",
+  width: "1100px",
   justifyContent: "center"
 };
 
 export class InvoicePage extends Component {
   static displayName = InvoicePage.name;
+  //defines the default state of invoices
   constructor(props) {
     super(props);
     this.state = {
-        invoice: []
+      invoice: []
     };
   }
-
+  // fetch invoice makes a network call to the invoice end point to retrieve invoice data with a id argumenet
   fetchInvoice = () => {
     const { id } = this.props;
     console.log(id);
-    fetch(`https://localhost:44375/api/invoice/GetInvoiceByCustomerId/${id}`)
+    fetch(`${URL}/${id}`)
       .then(res => res.json())
       .then(data => {
-        console.log(data);
         this.setState({ invoice: data });
       })
       .catch(error => {
@@ -36,7 +36,7 @@ export class InvoicePage extends Component {
   componentDidMount = () => {
     this.fetchInvoice();
   };
-
+  // columns is a touple that holds the invoice data structure
   columns = [
     { field: "id", name: "ID" },
     { field: "invoiceNo", name: "Invoice Number" },
@@ -49,7 +49,6 @@ export class InvoicePage extends Component {
   ];
 
   render = () => {
-    console.log(this.state.invoice);
     const { invoice } = this.state;
     return (
       <div>
@@ -58,6 +57,7 @@ export class InvoicePage extends Component {
           <hr />
         </div>
         <div className='ag-theme-balham' style={style}>
+          {/* react data grid needs two properties the column definition and the data to render */}
           <AgGridReact
             columnDefs={this.columns}
             rowData={invoice}

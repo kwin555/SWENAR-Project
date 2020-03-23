@@ -6,6 +6,7 @@ import "ag-grid-community/dist/styles/ag-theme-balham.css";
 import CustomerFormEdit from "./CustomerFormEdit";
 import { InvoicePage } from "../Invoice/InvoicePage";
 
+//default style of the page
 const style = {
   display: "flex",
   flexDirection: "column",
@@ -14,6 +15,7 @@ const style = {
 
 export class CustomerPage extends Component {
   static displayName = CustomerPage.name;
+  //the default state of the app being no customer name, number and redirect being false
   constructor(props) {
     super(props);
     this.state = {
@@ -23,11 +25,13 @@ export class CustomerPage extends Component {
     };
   }
 
+  //if a page refresh or load takes place fetch a customer by id
   componentDidMount = () => {
     const id = this.props.match.params.id;
     this.fetchCustomer(id);
   };
 
+  //if a customer property updateds update the field
   componentDidUpdate = (prevProps, prevState) => {
     if (
       prevState.Name !== this.state.Name ||
@@ -35,16 +39,14 @@ export class CustomerPage extends Component {
     ) {
       const id = this.props.match.params.id;
       this.fetchCustomer(id);
-      console.log("hello");
     }
   };
 
+  //network fetch to the single customer end point
   fetchCustomer = id => {
-    console.log(id);
     fetch(`${URL}/${id}`)
       .then(res => res.json())
       .then(data => {
-        console.log(data);
         this.setState({
           Name: data.name,
           Number: data.number
@@ -54,6 +56,8 @@ export class CustomerPage extends Component {
         console.log(error);
       });
   };
+
+  //updates the state of name and number
   handleNameNumberchange = (Name, Number) => {
     this.setState({
       Name,
@@ -61,8 +65,7 @@ export class CustomerPage extends Component {
     });
   };
 
-  getInvoice = id => {};
-
+  //makes a network call to delete customer information
   handleDelete = () => {
     let curr = this;
     const id = this.props.match.params.id;
@@ -70,21 +73,19 @@ export class CustomerPage extends Component {
     axios
       .delete(`/api/customer/${id}`)
       .then(function(response) {
-        console.log(response);
         curr.setState({ redirect: true });
-        console.log(this.state.redirect);
       })
-      .catch(function(error) {
-        console.log(error);
-      });
+      .catch(function(error) {});
   };
 
   render = () => {
+    //if you delete a customer send you back to the customers page
     if (this.state.redirect) {
       return <Redirect push to='/customerspage' />;
     }
     const { id } = this.props.match.params;
 
+    // render out the customer page
     return (
       <div>
         <hr />

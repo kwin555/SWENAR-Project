@@ -1,60 +1,68 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
 class CustomerFormEdit extends Component {
-    constructor(props) {
-        super(props);
+  //default state of app is empty name and number
+  constructor(props) {
+    super(props);
 
-        this.state = {
-            Name: '',
-            number: '',
-        }
-    }
+    this.state = {
+      Name: "",
+      number: ""
+    };
+  }
 
-    onChange = (e) => {
-        this.setState({
-            [e.target.name]: e.target.value,
-        });
-        const { Name, number } = this.state
-        console.log(Name, number);
-    }
+  //onchange handler for text input
+  onChange = e => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+    const { Name, number } = this.state;
+    console.log(Name, number);
+  };
 
-    submitToPUT = () => {
-        let { id } = this.props;
-        id = parseInt(id);
-        const axios = require('axios');
-        const { Name, number } = this.state;
-        this.props.handleNameNumberchange(Name, number);
-        console.log(Name, number)
-        axios.put(`/api/customer/${id}`, {
-            id,
-            Name,
-            Number: number,
-        })
-            .then(function (response) {
-                console.log(response);
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-    }
+  //call to back end to edit an existing name
+  submitToPUT = () => {
+    let { id } = this.props;
+    id = parseInt(id);
+    const axios = require("axios");
+    const { Name, number } = this.state;
+    this.props.handleNameNumberchange(Name, number);
 
-    render = () => {
-        return (
-            <div>
-                <form >
-                    <label htmlFor="Name">Enter new name: </label>
-                    <input id="Name" name="Name" type="text" onChange={this.onChange} />
+    axios
+      .put(`/api/customer/${id}`, {
+        id,
+        Name,
+        Number: number
+      })
+      .then(function(response) {
+        console.log(response);
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+  };
 
-                    <label htmlFor="Number">Enter new number:</label>
-                    <input id="number" name="number" type="text" onChange={this.onChange} />
-                </form>
-                <div>
-                    <button onClick={this.submitToPUT}>Save</button>
-                </div>
-            </div>
+  render = () => {
+    return (
+      <div>
+        <form>
+          <label htmlFor='Name'>Enter new name: </label>
+          <input id='Name' name='Name' type='text' onChange={this.onChange} />
 
-        );
-    }
+          <label htmlFor='Number'>Enter new number:</label>
+          <input
+            id='number'
+            name='number'
+            type='text'
+            onChange={this.onChange}
+          />
+        </form>
+        <div>
+          <button onClick={this.submitToPUT}>Save</button>
+        </div>
+      </div>
+    );
+  };
 }
 
 export default CustomerFormEdit;
