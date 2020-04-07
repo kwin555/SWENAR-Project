@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { URL } from "./CustomerConstants";
 
 class CustomerForm extends Component {
   //store default state of application
@@ -8,13 +7,13 @@ class CustomerForm extends Component {
 
     this.state = {
       Name: "",
-      number: ""
+      number: "",
     };
   }
   // call to handle the value in a text input
-  onChange = e => {
+  onChange = (e) => {
     this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
     const { Name, number } = this.state;
     console.log(Name, number);
@@ -28,13 +27,13 @@ class CustomerForm extends Component {
     axios
       .post("/api/customer", {
         Name: Name,
-        Number: number
+        Number: number,
       })
-      .then(function(response) {
+      .then(function (response) {
         console.log(response);
         curr.props.handleNumName(number, Name);
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error);
       });
   };

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { AgGridReact } from "ag-grid-react";
 import { URL } from "./InvoiceConstants";
 import "ag-grid-community/dist/styles/ag-grid.css";
@@ -7,16 +7,16 @@ import "ag-grid-community/dist/styles/ag-theme-balham.css";
 const style = {
   height: "300px",
   width: "1100px",
-  justifyContent: "center"
+  justifyContent: "center",
 };
 
-export class InvoicePage extends Component {
+export class InvoicePage extends React.Component {
   static displayName = InvoicePage.name;
   //defines the default state of invoices
   constructor(props) {
     super(props);
     this.state = {
-      invoice: []
+      invoice: [],
     };
   }
   // fetch invoice makes a network call to the invoice end point to retrieve invoice data with a id argumenet
@@ -24,11 +24,11 @@ export class InvoicePage extends Component {
     const { id } = this.props;
     console.log(id);
     fetch(`${URL}/${id}`)
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         this.setState({ invoice: data });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
@@ -45,7 +45,7 @@ export class InvoicePage extends Component {
     { field: "amount", name: "Amount" },
     { field: "invoiceDate", name: "Invoice Date" },
     { field: "dueDate", name: "Due Date" },
-    { field: "status", name: "Status" }
+    { field: "status", name: "Status" },
   ];
 
   render = () => {
