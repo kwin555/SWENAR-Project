@@ -1,5 +1,5 @@
-import fetchMock from "fetch-mock";
-import { CustomerForm } from "../CustomerForm";
+import React from "react";
+import CustomerForm from "../CustomerForm";
 import { shallow } from "enzyme";
 
 describe("CustomerForm tests", () => {
