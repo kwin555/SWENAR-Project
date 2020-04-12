@@ -8,6 +8,7 @@ class CustomerForm extends Component {
     this.state = {
       Name: "",
       number: "",
+      error: false,
     };
   }
   // call to handle the value in a text input
@@ -15,8 +16,6 @@ class CustomerForm extends Component {
     this.setState({
       [e.target.name]: e.target.value,
     });
-    const { Name, number } = this.state;
-    console.log(Name, number);
   };
 
   //call to create a new customer
@@ -30,11 +29,10 @@ class CustomerForm extends Component {
         Number: number,
       })
       .then(function (response) {
-        console.log(response);
         curr.props.handleNumName(number, Name);
       })
       .catch(function (error) {
-        console.log(error);
+        curr.setState({ error: true });
       });
   };
 

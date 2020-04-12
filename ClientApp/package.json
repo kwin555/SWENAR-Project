@@ -74,6 +74,7 @@
     "snapshotSerializers": [
       "enzyme-to-json/serializer"
     ],
+    "coverageDirectory": "build/code_coverage",
     "collectCoverageFrom": [
       "src/**/*.js",
       "!src/index.js",
@@ -87,7 +88,7 @@
       "!src/components/NavMenu.js"
     ],
     "coverageReporters": [
-      "text"
+      "html"
     ],
     "setupFilesAfterEnv": [
       "<rootDir>/src/setupTests.js"
