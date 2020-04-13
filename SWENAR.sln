@@ -1,7 +1,10 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWENAR", "SWENAR.csproj", "{B4C51C98-0699-4955-B207-0D9602CCD88A}"
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30002.166
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SWENAR", "SWENAR.csproj", "{B4C51C98-0699-4955-B207-0D9602CCD88A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWENAR.Tests", "..\SWENAR.Tests\SWENAR.Tests.csproj", "{C86A5844-0908-4C9B-B5EB-D38224898A40}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,5 +16,15 @@ Global
 		{B4C51C98-0699-4955-B207-0D9602CCD88A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4C51C98-0699-4955-B207-0D9602CCD88A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4C51C98-0699-4955-B207-0D9602CCD88A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C86A5844-0908-4C9B-B5EB-D38224898A40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C86A5844-0908-4C9B-B5EB-D38224898A40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C86A5844-0908-4C9B-B5EB-D38224898A40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C86A5844-0908-4C9B-B5EB-D38224898A40}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EA49802C-4712-4562-8A93-DC1A46A8347F}
 	EndGlobalSection
 EndGlobal
