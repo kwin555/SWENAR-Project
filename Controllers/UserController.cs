@@ -30,9 +30,9 @@ namespace SWENAR.Controllers
         /// <returns>New user</returns>
         [HttpPost]
         [ValidateModel]
-        public async Task<ActionResult<User>> Create(UserCreateVm vm)
+        public async Task<ActionResult<bool>> Create(UserCreateVm vm)
         {
- 
+
             var person = await _db.People
                 .Include(p => p.Customer)
                 .SingleOrDefaultAsync(p => p.Id == vm.PersonId);
@@ -46,37 +46,40 @@ namespace SWENAR.Controllers
 
                 var userResult = await _userManager.CreateAsync(user, "Password@1");
 
+                //if (userResult.Succeeded)
+                //{
+                //    var newUser = await _db.Users.SingleOrDefaultAsync(u => u.UserName == user.UserName);
+                //    var roleResult = await _userManager.AddToRoleAsync(user, Roles.Admin);
+
+                //    if (roleResult.Succeeded)
+                //    {
+                //        person.UserId = user.Id;
+                //        user.Claims.Add(new IdentityUserClaim<int> { ClaimType = Claims.UserId, ClaimValue = user.Id.ToString() });
+
+                //        if (person.CustomerId != null)
+                //        {
+                //            user.Claims.Add(new IdentityUserClaim<int>
+                //            {
+                //                ClaimType = Claims.CustomerId,
+                //                ClaimValue = person.CustomerId.ToString()
+                //            });
+                //        }
+                //        var result = await _db.SaveChangesAsync();
+
+                //        if (result > 0)
+                //        {
+                //            return true;
+                //        }
+
+                //    }
+                //}
                 if (userResult.Succeeded)
                 {
-                    var newUser = await _db.Users.SingleOrDefaultAsync(u => u.UserName == user.UserName);
-                    var roleResult = await _userManager.AddToRoleAsync(user, vm.Role);
-
-                    if (roleResult.Succeeded)
-                    {
-                        person.UserId = user.Id;
-                        user.Claims.Add(new IdentityUserClaim<int> { ClaimType = Claims.UserId, ClaimValue = user.Id.ToString() });
-
-                        if (person.CustomerId != null)
-                        {
-                            user.Claims.Add(new IdentityUserClaim<int>
-                            {
-                                ClaimType = Claims.CustomerId,
-                                ClaimValue = person.CustomerId.ToString()
-                            });
-                        }
-                        var result = await _db.SaveChangesAsync();
-
-                        if (result > 0)
-                        {
-                            return user;
-                        }
-
-                    }
+                   return true;
                 }
-
             }
 
-            return null;
+            return false;
         }
     }
 }

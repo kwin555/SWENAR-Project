@@ -35,7 +35,7 @@ namespace SWENAR
             services.AddDbContext<SWENARDBContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<User, Role>()
+            services.AddIdentity<User, Role>(options => options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-.@")
                 .AddEntityFrameworkStores<SWENARDBContext>()
                 .AddDefaultTokenProviders();
 
@@ -125,12 +125,12 @@ namespace SWENAR
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
                 var db = serviceScope.ServiceProvider.GetRequiredService<SWENARDBContext>();
-                db.Database.EnsureCreated();        
+                db.Database.EnsureCreated();
             }
 
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
-                var rse = serviceScope.ServiceProvider.GetRequiredService<InitialDataSeedStore>(); 
+                var rse = serviceScope.ServiceProvider.GetRequiredService<InitialDataSeedStore>();
                 rse.EnsureSeedData().Wait();
             }
 #endif
