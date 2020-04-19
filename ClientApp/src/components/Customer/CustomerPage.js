@@ -10,10 +10,10 @@ import { InvoicePage } from "../Invoice/InvoicePage";
 const style = {
   display: "flex",
   flexDirection: "column",
-  fontSize: "12px"
+  fontSize: "12px",
 };
 
-export class CustomerPage extends Component {
+class CustomerPage extends Component {
   static displayName = CustomerPage.name;
   //the default state of the app being no customer name, number and redirect being false
   constructor(props) {
@@ -21,7 +21,7 @@ export class CustomerPage extends Component {
     this.state = {
       Name: "",
       Number: "",
-      redirect: false
+      redirect: false,
     };
   }
 
@@ -42,17 +42,21 @@ export class CustomerPage extends Component {
     }
   };
 
+  setCustomerData(data) {
+    this.setState({
+      Name: data.name,
+      Number: data.number,
+    });
+  }
+
   //network fetch to the single customer end point
-  fetchCustomer = id => {
+  fetchCustomer = (id) => {
     fetch(`${URL}/${id}`)
-      .then(res => res.json())
-      .then(data => {
-        this.setState({
-          Name: data.name,
-          Number: data.number
-        });
+      .then((res) => res.json())
+      .then((data) => {
+        this.setCustomerData(data);
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
@@ -61,7 +65,7 @@ export class CustomerPage extends Component {
   handleNameNumberchange = (Name, Number) => {
     this.setState({
       Name,
-      Number
+      Number,
     });
   };
 
@@ -72,10 +76,10 @@ export class CustomerPage extends Component {
     const axios = require("axios");
     axios
       .delete(`/api/customer/${id}`)
-      .then(function(response) {
+      .then(function (response) {
         curr.setState({ redirect: true });
       })
-      .catch(function(error) {});
+      .catch(function (error) {});
   };
 
   render = () => {

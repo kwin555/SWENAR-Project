@@ -10,7 +10,7 @@ const style = {
   justifyContent: "center",
 };
 
-export class InvoicePage extends React.Component {
+class InvoicePage extends React.Component {
   static displayName = InvoicePage.name;
   //defines the default state of invoices
   constructor(props) {
@@ -22,7 +22,6 @@ export class InvoicePage extends React.Component {
   // fetch invoice makes a network call to the invoice end point to retrieve invoice data with a id argumenet
   fetchInvoice = () => {
     const { id } = this.props;
-    console.log(id);
     fetch(`${URL}/${id}`)
       .then((res) => res.json())
       .then((data) => {
@@ -67,3 +66,5 @@ export class InvoicePage extends React.Component {
     );
   };
 }
+
+export default InvoicePage;

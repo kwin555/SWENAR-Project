@@ -1,6 +1,6 @@
 ﻿import React, { Component } from "react";
 
-export class ExcelLoad extends Component {
+class ExcelLoad extends Component {
   static displayName = ExcelLoad.name;
 
   constructor(props) {
@@ -28,3 +28,5 @@ export class ExcelLoad extends Component {
     );
   }
 }
+
+export default ExcelLoad;

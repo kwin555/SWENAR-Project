@@ -7,17 +7,16 @@ class CustomerFormEdit extends Component {
 
     this.state = {
       Name: "",
-      number: ""
+      number: "",
+      error: undefined,
     };
   }
 
   //onchange handler for text input
-  onChange = e => {
+  onChange = (e) => {
     this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
-    const { Name, number } = this.state;
-    console.log(Name, number);
   };
 
   //call to back end to edit an existing name
@@ -32,13 +31,13 @@ class CustomerFormEdit extends Component {
       .put(`/api/customer/${id}`, {
         id,
         Name,
-        Number: number
+        Number: number,
       })
-      .then(function(response) {
+      .then(function (response) {
         console.log(response);
       })
-      .catch(function(error) {
-        console.log(error);
+      .catch(function (error) {
+        this.setState({ error: error });
       });
   };
 
