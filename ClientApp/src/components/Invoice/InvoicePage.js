@@ -10,7 +10,7 @@ const style = {
   justifyContent: "center",
 };
 
-class InvoicePage extends React.Component {
+export class InvoicePage extends React.Component {
   static displayName = InvoicePage.name;
   //defines the default state of invoices
   constructor(props) {
@@ -66,5 +66,3 @@ class InvoicePage extends React.Component {
     );
   };
 }
-
-export default InvoicePage;

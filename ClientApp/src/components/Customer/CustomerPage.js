@@ -13,7 +13,7 @@ const style = {
   fontSize: "12px",
 };
 
-class CustomerPage extends Component {
+export default class CustomerPage extends Component {
   static displayName = CustomerPage.name;
   //the default state of the app being no customer name, number and redirect being false
   constructor(props) {
@@ -112,4 +112,4 @@ class CustomerPage extends Component {
   };
 }
 
-export default withRouter(CustomerPage);
+withRouter(CustomerPage);

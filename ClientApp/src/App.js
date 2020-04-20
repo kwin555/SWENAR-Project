@@ -8,8 +8,8 @@ import { CustomersPage } from "./components/Customer/CustomersPage";
 import AuthorizeRoute from "./components/api-authorization/AuthorizeRoute";
 import ApiAuthorizationRoutes from "./components/api-authorization/ApiAuthorizationRoutes";
 import { ApplicationPaths } from "./components/api-authorization/ApiAuthorizationConstants";
-import { CustomerPage } from "./components/Customer/CustomerPage";
-import { ExcelLoad } from "./components/Invoice/ExcelLoad";
+import CustomerPage from "./components/Customer/CustomerPage";
+import ExcelLoad from "./components/Invoice/ExcelLoad";
 
 import "./bootstrap.min.css";
 import "./custom.css";
