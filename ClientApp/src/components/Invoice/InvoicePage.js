@@ -1,6 +1,7 @@
 import React from "react";
 import { AgGridReact } from "ag-grid-react";
 import { URL } from "./InvoiceConstants";
+import axios from "axios";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-balham.css";
 //default styling of the react datagrid
@@ -22,12 +23,12 @@ export class InvoicePage extends React.Component {
   // fetch invoice makes a network call to the invoice end point to retrieve invoice data with a id argumenet
   fetchInvoice = () => {
     const { id } = this.props;
-    fetch(`${URL}/${id}`)
-      .then((res) => res.json())
-      .then((data) => {
+    axios
+      .get(`${URL}/${id}`)
+      .then(function ({ data }) {
         this.setState({ invoice: data });
       })
-      .catch((error) => {
+      .catch(function (error) {
         console.log(error);
       });
   };

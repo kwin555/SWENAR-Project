@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from "axios";
 
 class CustomerForm extends Component {
   //store default state of application
@@ -21,7 +22,7 @@ class CustomerForm extends Component {
   //call to create a new customer
   submitToPost = () => {
     let curr = this;
-    const axios = require("axios");
+
     const { Name, number } = this.state;
     axios
       .post("/api/customer", {

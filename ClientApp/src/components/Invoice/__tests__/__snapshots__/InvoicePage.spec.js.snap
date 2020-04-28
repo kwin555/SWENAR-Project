@@ -1,25 +1,62 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Invoice Page tests shows customer forms with things rendered 1`] = `
-<ExcelLoad>
+<div>
   <div>
-    <form
-      action="https://localhost:44375/api/Invoice/Load"
-      enctype="multipart/form-data"
-      method="post"
-    >
-      <input
-        className="form-control"
-        id="excel-file"
-        name="excelFile"
-        type="file"
-      />
-      <button
-        type="submit"
-      >
-        Submit
-      </button>
-    </form>
+    <h3>
+      Invoices
+    </h3>
+    <hr />
   </div>
-</ExcelLoad>
+  <div
+    className="ag-theme-balham"
+    style={
+      Object {
+        "height": "300px",
+        "justifyContent": "center",
+        "width": "1100px",
+      }
+    }
+  >
+    <AgGridReact
+      columnDefs={
+        Array [
+          Object {
+            "field": "id",
+            "name": "ID",
+          },
+          Object {
+            "field": "invoiceNo",
+            "name": "Invoice Number",
+          },
+          Object {
+            "field": "customerNumber",
+            "name": "Customer Number",
+          },
+          Object {
+            "field": "customerName",
+            "name": "Customer Name",
+          },
+          Object {
+            "field": "amount",
+            "name": "Amount",
+          },
+          Object {
+            "field": "invoiceDate",
+            "name": "Invoice Date",
+          },
+          Object {
+            "field": "dueDate",
+            "name": "Due Date",
+          },
+          Object {
+            "field": "status",
+            "name": "Status",
+          },
+        ]
+      }
+      rowData={Array []}
+    />
+  </div>
+</div>
 `;

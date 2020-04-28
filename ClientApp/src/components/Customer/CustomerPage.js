@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { withRouter, Redirect } from "react-router";
-import { URL } from "./CustomerConstants";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-balham.css";
 import CustomerFormEdit from "./CustomerFormEdit";
 import { InvoicePage } from "../Invoice/InvoicePage";
+import axios from "axios";
 
 //default style of the page
 const style = {
@@ -42,23 +42,21 @@ export default class CustomerPage extends Component {
     }
   };
 
-  setCustomerData(data) {
+  setCustomerData({ name, number }) {
     this.setState({
-      Name: data.name,
-      Number: data.number,
+      Name: name,
+      Number: number,
     });
   }
 
   //network fetch to the single customer end point
   fetchCustomer = (id) => {
-    fetch(`${URL}/${id}`)
-      .then((res) => res.json())
-      .then((data) => {
+    axios
+      .get(`/api/customer/${id}`)
+      .then(function ({ data }) {
         this.setCustomerData(data);
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch(function (error) {});
   };
 
   //updates the state of name and number
@@ -73,13 +71,14 @@ export default class CustomerPage extends Component {
   handleDelete = () => {
     let curr = this;
     const id = this.props.match.params.id;
-    const axios = require("axios");
     axios
       .delete(`/api/customer/${id}`)
-      .then(function (response) {
+      .then(function () {
         curr.setState({ redirect: true });
       })
-      .catch(function (error) {});
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
   render = () => {
