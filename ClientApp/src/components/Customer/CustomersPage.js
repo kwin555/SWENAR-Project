@@ -4,32 +4,32 @@ import CustomerForm from "./CustomerForm";
 import { URL } from "./CustomerConstants";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-balham.css";
+import axios from "axios";
 
 //default styling the customers react data grid
 const style = {
   height: "500px",
   width: "610px",
-  justifyContent: "center"
+  justifyContent: "center",
 };
 
-export class CustomersPage extends Component {
+export default class CustomersPage extends Component {
   static displayName = CustomersPage.name;
   //default state of the compoment is empty customers
   constructor(props) {
     super(props);
     this.state = {
-      customers: []
+      customers: [],
     };
   }
   // used to fetch all of the customers from the end point
   fetchCustomers = () => {
-    fetch(URL)
-      .then(res => res.json())
-      .then(data => {
-        console.log(data);
-        this.setState({ customers: data });
+    axios
+      .get(URL)
+      .then((response) => {
+        this.setState({ customers: response });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
@@ -47,31 +47,33 @@ export class CustomersPage extends Component {
     let customer = {
       id: this.state.customers[this.state.customers.length - 1].id + 1,
       name: Name,
-      number: Num
+      number: Num,
     };
     this.setState({
-      customers: [...this.state.customers, customer]
+      customers: [...this.state.customers, customer],
     });
   };
 
   // properties of each customer
-  columns = [
-    {
-      field: "id",
-      name: "ID",
-      cellRenderer: params => {
-        var link = document.createElement("a");
-        link.href = "/customerpage/" + params.value;
-        link.innerText = params.value;
-        return link;
-      }
-    },
-    { field: "name", name: "Name" },
-    { field: "number", name: "Number" }
-  ];
+  columns = () => {
+    return [
+      {
+        field: "id",
+        name: "ID",
+        cellRenderer: (params) => {
+          var link = document.createElement("a");
+          link.href = "/customerpage/" + params.value;
+          link.innerText = params.value;
+          return link;
+        },
+      },
+      { field: "name", name: "Name" },
+      { field: "number", name: "Number" },
+    ];
+  };
 
   render = () => {
-    // Rendering out hhe customers React data grid.
+    // Rendering out the customers React data grid.
     return (
       <div>
         <div>

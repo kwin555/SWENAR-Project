@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CustomerPage tests shows customer page with things rendered 1`] = `
+<div>
+  <div>
+    <h3>
+      Customers
+    </h3>
+    <CustomerForm
+      handleNumName={[Function]}
+    />
+    <hr />
+  </div>
+  <div
+    className="ag-theme-balham"
+    style={
+      Object {
+        "height": "500px",
+        "justifyContent": "center",
+        "width": "610px",
+      }
+    }
+  >
+    <AgGridReact
+      columnDefs={[Function]}
+      rowData={Array []}
+    />
+  </div>
+</div>
+`;
