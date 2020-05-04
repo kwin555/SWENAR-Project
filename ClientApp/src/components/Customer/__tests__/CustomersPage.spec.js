@@ -4,6 +4,8 @@ import { shallow, mount } from "enzyme";
 import axios from "axios";
 import fetchMock from "fetch-mock";
 
+import {URL} from '../CustomerConstants'
+
 describe("CustomerPage tests", () => {
   it("shows customer page with things rendered", () => {
     const props = {
@@ -47,5 +49,27 @@ describe("CustomerPage tests", () => {
     expect(columns[0].cellRenderer({ value: 3 }).toString()).toEqual(
         'http://localhost/customerpage/3'
     );
+  });
+
+  it("should return response", async () => {
+    const props = {
+      customers: [{ id: 1, Name: "Kevin", number: "23423" }],
+      match: {
+        params: 3,
+      },
+    };
+
+    const customersPage = shallow(<CustomersPage {...props} />);
+
+    fetchMock.get(URL, props.customers)
+
+
+    jest.spyOn(axios, 'get');
+
+    await customersPage.instance().fetchCustomers();
+
+    expect(axios.get).toHaveBeenCalledWith(URL);
+    expect(customersPage.state()).toEqual({customers: []});
+
   });
 });

@@ -23,15 +23,14 @@ export default class CustomersPage extends Component {
     };
   }
   // used to fetch all of the customers from the end point
-  fetchCustomers = () => {
-    axios
-      .get(URL)
-      .then((response) => {
-        this.setState({ customers: response });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+   fetchCustomers = async()  => {
+      try {
+        const response = await axios.get(URL);
+        this.setState({customers: response.data});
+        
+      } catch (error) {
+        console.log(error)
+      }
   };
   // when a page loads fetch the customer information
   componentDidMount = () => {
