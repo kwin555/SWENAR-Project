@@ -1,16 +1,16 @@
-import React, { Component } from "react";
-import { withRouter, Redirect } from "react-router";
-import "ag-grid-community/dist/styles/ag-grid.css";
-import "ag-grid-community/dist/styles/ag-theme-balham.css";
-import CustomerFormEdit from "./CustomerFormEdit";
-import { InvoicePage } from "../Invoice/InvoicePage";
-import axios from "axios";
+import React, { Component } from 'react';
+import { withRouter, Redirect } from 'react-router';
+import 'ag-grid-community/dist/styles/ag-grid.css';
+import 'ag-grid-community/dist/styles/ag-theme-balham.css';
+import CustomerFormEdit from './CustomerFormEdit';
+import { InvoicePage } from '../Invoice/InvoicePage';
+import axios from 'axios';
 
 //default style of the page
 const style = {
-  display: "flex",
-  flexDirection: "column",
-  fontSize: "12px",
+  display: 'flex',
+  flexDirection: 'column',
+  fontSize: '12px',
 };
 
 export default class CustomerPage extends Component {
@@ -19,8 +19,8 @@ export default class CustomerPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      Name: "",
-      Number: "",
+      Name: '',
+      Number: '',
       redirect: false,
     };
   }
@@ -50,13 +50,13 @@ export default class CustomerPage extends Component {
   }
 
   //network fetch to the single customer end point
-  fetchCustomer = (id) => {
-    axios
-      .get(`/api/customer/${id}`)
-      .then(function ({ data }) {
-        this.setCustomerData(data);
-      })
-      .catch(function (error) {});
+  fetchCustomer = async (id) => {
+    try {
+      const response = await axios.get(`/api/customer/${id}`);
+      this.setCustomerData(response.data);
+    } catch (error) {
+      this.setState({ error: true });
+    }
   };
 
   //updates the state of name and number
@@ -68,23 +68,22 @@ export default class CustomerPage extends Component {
   };
 
   //makes a network call to delete customer information
-  handleDelete = () => {
+  handleDelete = async () => {
     let curr = this;
     const id = this.props.match.params.id;
-    axios
-      .delete(`/api/customer/${id}`)
-      .then(function () {
-        curr.setState({ redirect: true });
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+
+    try {
+      await axios.delete(`/api/customer/${id}`);
+      curr.setState({ redirect: true });
+    } catch (error) {
+      this.setState({ error: true });
+    }
   };
 
   render = () => {
     //if you delete a customer send you back to the customers page
     if (this.state.redirect) {
-      return <Redirect push to='/customerspage' />;
+      return <Redirect push to="/customerspage" />;
     }
     const { id } = this.props.match.params;
 

@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import axios from "axios";
+import React, { Component } from 'react';
+import axios from 'axios';
 
 class CustomerForm extends Component {
   //store default state of application
@@ -7,8 +7,8 @@ class CustomerForm extends Component {
     super(props);
 
     this.state = {
-      Name: "",
-      number: "",
+      Name: '',
+      number: '',
       error: false,
     };
   }
@@ -20,35 +20,33 @@ class CustomerForm extends Component {
   };
 
   //call to create a new customer
-  submitToPost = () => {
+  submitToPost = async () => {
     let curr = this;
 
     const { Name, number } = this.state;
-    axios
-      .post("/api/customer", {
+    try {
+      await axios.post(`/api/customer`, {
         Name: Name,
         Number: number,
-      })
-      .then(function (response) {
-        curr.props.handleNumName(number, Name);
-      })
-      .catch(function (error) {
-        curr.setState({ error: true });
       });
+      curr.props.handleNumName(number, Name);
+    } catch (error) {
+      this.setState({ error: true });
+    }
   };
 
   render = () => {
     return (
       <div>
         <form>
-          <label htmlFor='Name'>Enter name: </label>
-          <input id='Name' name='Name' type='text' onChange={this.onChange} />
+          <label htmlFor="Name">Enter name: </label>
+          <input id="Name" name="Name" type="text" onChange={this.onChange} />
 
-          <label htmlFor='Number'>Enter customer number:</label>
+          <label htmlFor="Number">Enter customer number:</label>
           <input
-            id='number'
-            name='number'
-            type='text'
+            id="number"
+            name="number"
+            type="text"
             onChange={this.onChange}
           />
         </form>
